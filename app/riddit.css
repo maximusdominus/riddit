@@ -1,12 +1,12 @@
 .riddit-actions {
-  position: absolute;
-  left: 0;
+  position: relative;
+  display: inline-block;
   color: #666666;
 }
 
 .riddit-action {
   cursor: pointer;
-  padding: 0px 1px;
+  padding: 0 1px;
   background-color: #F4F4F4;
   border: 1px solid #EEEEEE;
 }
@@ -15,6 +15,7 @@
 }
 
 .riddit-dashboard {
+  padding: 0 !important;
   border: 1px solid #EEEEEE;
   background-color: white;
   margin-bottom: 6px;
@@ -41,7 +42,6 @@
   background-color: #FFFFFF;
 }
 
-
 .riddit-page-status {
   float: left;
 }
@@ -49,4 +49,21 @@
   display: inline-block;
   margin-left: 8px;
   padding: 2px 5px;
+}
+
+
+
+.res-nightmode .riddit-control, .res-nightmode .riddit-dashboard, .res-nightmode .riddit-action {
+  color: rgba(221, 221, 221, 0.8);
+  border: 1px solid #111;
+  background-color: rgba(24, 24, 24, 0.2);
+}
+
+.res-nightmode .riddit-control {
+  border-top: none;
+  border-bottom: none;
+}
+
+.res-nightmode .riddit-action:hover, .res-nightmode .riddit-control:hover {
+  background-color: rgba(66,66,66,0.5);
 }
