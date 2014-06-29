@@ -15,6 +15,11 @@ var Ridditor = {
   // JQuery selector for visible links (for calculating how many are hidden)
   hiddenLinkSelector_: '.thing.link[data-fullname]:hidden',
   
+    
+  // JQuery selector for visible links (for bulk hide)
+  visibleLinkSelector_: '.thing.link[data-fullname]:visible',
+  
+  
   // JQuery selector for the link list
   listSelector_: '#siteTable',
  
@@ -40,6 +45,7 @@ var Ridditor = {
 	h    +=     '<div class="riddit-status hidden_all"><span class="variable"></span> Total hidden</div>';
 	h    +=   '</div>';
 	h    +=   '<div class="riddit-controls">';
+	h    +=     '<div class="riddit-control hide-page">Hide all on page</div>';
 	h    +=     '<div class="riddit-control show">Temporarily show hidden links</div>';
 	h    +=     '<div class="riddit-control unhide_all">Unhide all hidden links</div>';
 	h    +=   '</div>';
@@ -78,6 +84,25 @@ var Ridditor = {
 	this.removeLinkFromDOM_(link);
 	this.storeAdd_(link);
 	this.refreshDashboard_();
+  },
+  
+  /**
+   * Hide all visible links
+   *
+   * @private
+   */
+  removeLinkBulk_: function(){
+    var that = this;
+	
+    var linkElements = $(this.visibleLinkSelector_);
+	linkElements.each(function(i, e){
+	  var link = $(e).data().fullname;
+	  that.removeLinkFromDOM_(link);
+	  that.storeAdd_(link);
+	  
+	});
+  
+    this.refreshDashboard_();
   },
   
   
@@ -123,6 +148,12 @@ var Ridditor = {
 	  that.refreshDashboard_();
 	});
 	
+	
+	// Hide all links on the page
+	$('.riddit-control.hide-page').click(function(){
+	  that.removeLinkBulk_();
+	
+	});
   },
   
   /**
