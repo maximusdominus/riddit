@@ -1,13 +1,13 @@
 {
   "name": "Riddit",
-  "version": "1.1",
+  "version": "1.3",
   "description": "Hide posts from showing on Reddit.com",
   "manifest_version": 2,
   "permissions": ["tabs"],
 
   "content_scripts": [
     {
-      "matches": ["http://www.reddit.com/*"],
+      "matches": ["https://www.reddit.com/*"],
       "js": ["jquery-1.10.2.min.js", "riddit.js"],
       "css": ["riddit.css"]
     }
