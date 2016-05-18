@@ -10,6 +10,11 @@
   background-color: #F4F4F4;
   border: 1px solid #EEEEEE;
 }
+
+.riddit-action.block {
+  margin-left: 5px;
+}
+
 .riddit-action:hover {
   background-color: #FFFFFF;
 }
