@@ -24,6 +24,9 @@ var Ridditor = {
   // CSS selector for the link list
   listSelector_: '#siteTable',
 
+  // Maximum amount of links before FIFO kicks in
+  maxLinkEntries_: 200000,
+
 
   /**
    * HTML for the 'hide' link button
@@ -58,6 +61,7 @@ var Ridditor = {
     h    +=   '<div class="riddit-controls">';
     h    +=     '<div class="riddit-control hide-page">Hide all</div>';
     h    +=     '<div class="riddit-control show">Temporarily show</div>';
+    h    +=     '<div class="riddit-control unhide_links">Unhide links</div>';
     h    +=     '<div class="riddit-control unhide_subs">Unblock subs</div>';
     h    +=     '<div class="riddit-control unhide_all">Full reset</div>';
     h    +=   '</div>';
@@ -80,6 +84,7 @@ var Ridditor = {
     if ($('body').hasClass('listing-page')) {
       this.storeSetup_();
       this.migrateStore_();
+      this.truncateLinks_();
       this.uiSetup_();
       this.clense_();
       this.refreshDashboard_();
@@ -186,7 +191,7 @@ var Ridditor = {
         });
     });
 
-    // Unblock subs
+    // Permanently Unblock all subs
     $('.riddit-control.unhide_subs').click(function(){
       if (confirm('Are you sure you want to unblock all subs?')) {
           that.storeClear_('subs');
@@ -196,7 +201,17 @@ var Ridditor = {
       }
     });
 
-    // Permanently reveal items on the current page, As well as their hide buttons.
+    // Permanently unhide all links
+    $('.riddit-control.unhide_links').click(function(){
+      if (confirm('Are you sure you want to permanently unhide all links?')) {
+          that.storeClear_('links');
+          that.restoreDOM_();
+          that.clense_();
+          that.refreshDashboard_();
+      }
+    });
+
+    // Permanently reveal all items, As well as their hide buttons.
     $('.riddit-control.unhide_all').click(function(){
       if (confirm('Are you sure you want to unhide all links and unblock all subs?')) {
         that.storeClear_('subs');
@@ -256,15 +271,43 @@ var Ridditor = {
     }
   },
 
+  /**
+   * Truncates the store to prevent more than 200000 entries.
+   *
+   * @private
+   */
+  truncateLinks_: function() {
+    var currentLinks = this.storeFetchAll_('links');
+    var numLinks = currentLinks.length;
+
+    if (numLinks > this.maxLinkEntries_) {
+      var links = currentLinks.slice(numLinks - this.maxLinkEntries_, numLinks);
+      this.storeSet_(links, 'links');
+    }
+  },
+
 
   /**
-   * Add the given link to the store in the given category
+   * Push the given string onto the correct list (subs, links, etc)
    *
    * @private
    */
   storeAdd_: function(item, category) {
+    var list = this.storeFetchAll_(category);
+    list.push(item);
+    this.storeSet_(list, category);
+  },
+
+  /**
+   * Set the top-level category key in the store to the stringified version of the given object
+   *
+   * Ex: this.storeSet(['link1', 'link2'], 'links')
+   *
+   * @private
+   */
+  storeSet_: function(obj, category) {
     var stored_obj = JSON.parse(localStorage[this.storageKey]);
-    stored_obj[category].push(item);
+    stored_obj[category] = obj;
     localStorage[this.storageKey] = JSON.stringify(stored_obj);
   },
 
@@ -285,9 +328,7 @@ var Ridditor = {
    * @private
    */
   storeClear_: function(category) {
-    var stored_obj = JSON.parse(localStorage[this.storageKey]);
-    stored_obj[category] = [];
-    localStorage[this.storageKey] = JSON.stringify(stored_obj);
+    this.storeSet_([], category);
   },
 
 

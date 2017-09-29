@@ -1,6 +1,6 @@
 {
   "name": "Riddit",
-  "version": "1.4",
+  "version": "1.5",
   "description": "Hide posts and block subs on Reddit.com",
   "manifest_version": 2,
   "permissions": ["tabs"],
