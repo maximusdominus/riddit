@@ -4,7 +4,7 @@
 // A CROME EXTENSION DESIGNED TO HELP GET RID OF THE UNDESIRABLE LINKS ON REDDIT.COM
 //
 
-var Ridditor = {
+var RidditorOld = {
 
   // Localstorage key, for looking up the list of hidden links
   storageKey: 'riddit_store',
@@ -436,6 +436,6 @@ var Ridditor = {
   }
 };
 
-Ridditor.initialize();
+RidditorOld.initialize();
 
 

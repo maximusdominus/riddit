@@ -1,13 +1,13 @@
 {
   "name": "Riddit",
-  "version": "1.5",
+  "version": "1.6",
   "description": "Hide posts and block subs on Reddit.com",
   "manifest_version": 2,
   "permissions": ["tabs"],
 
   "content_scripts": [
     {
-      "matches": ["https://www.reddit.com/*"],
+      "matches": ["https://old.reddit.com/*"],
       "js": ["jquery-1.10.2.min.js", "riddit.js"],
       "css": ["riddit.css"]
     }
